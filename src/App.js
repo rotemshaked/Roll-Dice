@@ -28,23 +28,25 @@ function App() {
   };
 
   const handleHoldClick = () => {
-    if (player1Turn) {
-      let current = scorePlayer1 + currentPlayer1Score;
-      setScorePlayer1(current);
-      setPlayer1Turn(!player1Turn);
-      setCurrentPlayer1Score(0);
-      if (current > 30) {
-        setDiceExist(false);
-        setWinner(true);
-      }
-    } else {
-      let current = scorePlayer2 + currentPlayer2Score;
-      setScorePlayer2(current);
-      setPlayer1Turn(!player1Turn);
-      setCurrentPlayer2Score(0);
-      if (current > 30) {
-        setDiceExist(false);
-        setWinner(true);
+    if (!winner) {
+      if (player1Turn) {
+        let current = scorePlayer1 + currentPlayer1Score;
+        setScorePlayer1(current);
+        setPlayer1Turn(!player1Turn);
+        setCurrentPlayer1Score(0);
+        if (current > 30) {
+          setDiceExist(false);
+          setWinner(true);
+        }
+      } else {
+        let current = scorePlayer2 + currentPlayer2Score;
+        setScorePlayer2(current);
+        setPlayer1Turn(!player1Turn);
+        setCurrentPlayer2Score(0);
+        if (current > 30) {
+          setDiceExist(false);
+          setWinner(true);
+        }
       }
     }
   };
@@ -58,13 +60,6 @@ function App() {
     setPlayer1Turn(true);
     setWinner(false);
   };
-
-  // const startGame = () => {
-  //   if(){
-  //     handleRollDice();
-  //     handleHoldClick()
-  //   }
-  // };
 
   return (
     <div className="game-screen">
@@ -93,12 +88,16 @@ function App() {
         playerName="PLAYER 1"
         score={scorePlayer1}
         roll={currentPlayer1Score}
+        currentPlaying={player1Turn ? "current-playing" : ""}
+        isWinner={!player1Turn && winner ? "is-winner" : ""}
       />
       <Player
         playerSide="right-player"
         playerName="PLAYER 2"
         score={scorePlayer2}
         roll={currentPlayer2Score}
+        currentPlaying={!player1Turn ? "current-playing" : ""}
+        isWinner={player1Turn && winner ? "is-winner" : ""}
       />
     </div>
   );

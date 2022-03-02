@@ -1,8 +1,15 @@
 import "../assets/styles.css";
 
-const Player = ({ playerSide, playerName, score, roll }) => {
+const Player = ({
+  playerSide,
+  playerName,
+  score,
+  roll,
+  currentPlaying,
+  isWinner,
+}) => {
   return (
-    <div className={`player-board ${playerSide}`}>
+    <div className={`player-board ${playerSide} ${currentPlaying} ${isWinner}`}>
       <div className="player-name">{playerName}</div>
       <div className="score">{score}</div>
       <div className="current-roll">
