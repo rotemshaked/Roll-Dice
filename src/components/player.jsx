@@ -13,7 +13,7 @@ const Player = ({
       <div className="player-name">{playerName}</div>
       <div className="score">{score}</div>
       <div className="current-roll">
-        <div className="current">CURRENT ROLL</div>
+        <div className="current">CURRENT TURN SUM</div>
         <div className="roll">{roll}</div>
       </div>
     </div>

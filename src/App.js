@@ -90,7 +90,7 @@ function App() {
           ></Button>
           <Button
             className="btn hold"
-            btnName="➕ HOLD"
+            btnName="➕ END TURN"
             onClick={handleHoldClick}
           ></Button>
         </div>
