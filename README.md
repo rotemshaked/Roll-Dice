@@ -3,7 +3,7 @@ The first player to reach 30 points is the winner!
 Hold your score before the roll turns 1, and the score resets!
 
 
-![alt text](https://github.com/rotemshaked/Roll-Dice/blob/d04b903e70339a3b7bd214d323e5f9d03c044faa/public/roll-dice.png)
+![alt text](https://github.com/rotemshaked/Roll-Dice/blob/b49c50edec03d1b5546c2ad145adcc838108de71/public/roll-dice.png)
 
 Netlify link:
 
