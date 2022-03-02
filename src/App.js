@@ -20,9 +20,21 @@ function App() {
       setDiceNumber(randomNumber);
       setDiceExist(true);
       if (player1Turn) {
-        setCurrentPlayer1Score((randomNumber += currentPlayer1Score));
+        if (randomNumber === 1) {
+          setScorePlayer1(0);
+          setCurrentPlayer1Score(0);
+          setPlayer1Turn(!player1Turn);
+        } else {
+          setCurrentPlayer1Score((randomNumber += currentPlayer1Score));
+        }
       } else {
-        setCurrentPlayer2Score((randomNumber += currentPlayer2Score));
+        if (randomNumber === 1) {
+          setScorePlayer2(0);
+          setCurrentPlayer2Score(0);
+          setPlayer1Turn(!player1Turn);
+        } else {
+          setCurrentPlayer2Score((randomNumber += currentPlayer2Score));
+        }
       }
     }
   };
