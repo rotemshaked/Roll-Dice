@@ -20,52 +20,39 @@ const App = () => {
       let randomNumber = Math.floor(Math.random() * 6) + 1;
       setDiceNumber(randomNumber);
       setShowDice(true);
-      if (player1Turn) {
-        // check how to use "usestate" for nested object
-        // make lines 29-30 as fuction.
-        // change current player to the same name as "Player1" or "Player2"
-        if (randomNumber === 1) {
-          setScorePlayer1(0);
-          setcurrentScorePlayer1(0);
-          setPlayer1Turn(!player1Turn);
-        } else {
-          setcurrentScorePlayer1((randomNumber += currentScorePlayer1));
-        }
-      } else {
-        if (randomNumber === 1) {
-          setScorePlayer2(0);
-          setcurrentScorePlayer2(0);
-          setPlayer1Turn(!player1Turn);
-        } else {
-          setcurrentScorePlayer2((randomNumber += currentScorePlayer2));
-        }
-      }
+      currentPlaying(randomNumber);
+    }
+  };
+
+  const currentPlaying = (randomNumber) => {
+    if (randomNumber === 1) {
+      player1Turn
+        ? setScorePlayer1(0) && setcurrentScorePlayer1(0)
+        : setScorePlayer2(0) && setcurrentScorePlayer2(0);
+      setPlayer1Turn(!player1Turn);
+    } else if (!winnerName) {
+      player1Turn
+        ? setcurrentScorePlayer1((randomNumber += currentScorePlayer1))
+        : setcurrentScorePlayer2((randomNumber += currentScorePlayer2));
     }
   };
 
   const endTurn = () => {
     if (!winnerName) {
-      if (player1Turn) {
-        // make a function
-        let current = scorePlayer1 + currentScorePlayer1;
-        setScorePlayer1(current);
-        setPlayer1Turn(!player1Turn);
-        setcurrentScorePlayer1(0);
-        if (current >= 30) {
-          setShowDice(false);
-          setWinnerName(`player 1`);
-        }
-      } else {
-        // duplicate code
-        let current = scorePlayer2 + currentScorePlayer2;
-        setScorePlayer2(current);
-        setPlayer1Turn(!player1Turn);
-        setcurrentScorePlayer2(0);
-        if (current >= 30) {
-          setShowDice(false);
-          setWinnerName(`player 2`);
-        }
-      }
+      scores();
+    }
+  };
+
+  const scores = (player) => {
+    let current = player1Turn
+      ? scorePlayer1 + currentScorePlayer1
+      : scorePlayer2 + currentScorePlayer2;
+    player1Turn ? setScorePlayer1(current) : setScorePlayer2(current);
+    setPlayer1Turn(!player1Turn);
+    player1Turn ? setcurrentScorePlayer1(0) : setcurrentScorePlayer2(0);
+    if (current >= 30) {
+      setShowDice(false);
+      player1Turn ? setWinnerName(`player 1`) : setWinnerName(`player 2`);
     }
   };
 
