@@ -11,25 +11,20 @@ const App = () => {
   const [scorePlayer2, setScorePlayer2] = useState(0);
   const [currentScorePlayer1, setcurrentScorePlayer1] = useState(0);
   const [currentScorePlayer2, setcurrentScorePlayer2] = useState(0);
-
-  // change name to showDice
-  const [diceExist, setDiceExist] = useState(false);
+  const [showDice, setShowDice] = useState(false);
   const [player1Turn, setPlayer1Turn] = useState(true);
-  // should be player name
-  const [winner, setWinner] = useState(false);
+  const [winnerName, setWinnerName] = useState(undefined);
 
-  // turn?
-  const handleRollDice = () => {
-    if (!winner) {
+  const handleTurn = () => {
+    if (!winnerName) {
       let randomNumber = Math.floor(Math.random() * 6) + 1;
       setDiceNumber(randomNumber);
-      setDiceExist(true);
+      setShowDice(true);
       if (player1Turn) {
         // check how to use "usestate" for nested object
         // make lines 29-30 as fuction.
         // change current player to the same name as "Player1" or "Player2"
         if (randomNumber === 1) {
-
           setScorePlayer1(0);
           setcurrentScorePlayer1(0);
           setPlayer1Turn(!player1Turn);
@@ -48,18 +43,17 @@ const App = () => {
     }
   };
 
-  // what is hold
-  const handleHoldClick = () => {
-    if (!winner) {
+  const endTurn = () => {
+    if (!winnerName) {
       if (player1Turn) {
         // make a function
         let current = scorePlayer1 + currentScorePlayer1;
         setScorePlayer1(current);
         setPlayer1Turn(!player1Turn);
         setcurrentScorePlayer1(0);
-        if (current > 30) {
-          setDiceExist(false);
-          setWinner(true);
+        if (current >= 30) {
+          setShowDice(false);
+          setWinnerName(`player 1`);
         }
       } else {
         // duplicate code
@@ -67,23 +61,22 @@ const App = () => {
         setScorePlayer2(current);
         setPlayer1Turn(!player1Turn);
         setcurrentScorePlayer2(0);
-        if (current > 30) {
-          setDiceExist(false);
-          setWinner(true);
+        if (current >= 30) {
+          setShowDice(false);
+          setWinnerName(`player 2`);
         }
       }
     }
   };
 
-  // reset game
-  const newGame = () => {
+  const resetGame = () => {
     setcurrentScorePlayer1(0);
     setcurrentScorePlayer2(0);
     setScorePlayer1(0);
     setScorePlayer2(0);
-    setDiceExist(false);
+    setShowDice(false);
     setPlayer1Turn(true);
-    setWinner(false);
+    setWinnerName(undefined);
   };
   // check if there is a way to use a variable as className
   // remove prefixes from classes for example: "btn"
@@ -92,27 +85,26 @@ const App = () => {
   const msg = {
     currentPlaying: "current-playing",
     notPlaying: "",
-
-  }
+  };
   return (
     <div className="game-screen">
       <div className="buttons">
         <Button
           className="btn new-game"
-          btnName=" NEW GAME"
-          onClick={newGame}
+          btnName="NEW GAME"
+          onClick={resetGame}
         ></Button>
-        {diceExist && <Dice diceNumber={diceNumber} />}
+        {showDice && <Dice diceNumber={diceNumber} />}
         <div className="bottom-btns">
           <Button
             className="btn roll-dice"
             btnName="🎲 ROLL DICE"
-            onClick={handleRollDice}
+            onClick={handleTurn}
           ></Button>
           <Button
             className="btn hold"
             btnName="➕ END TURN"
-            onClick={handleHoldClick}
+            onClick={endTurn}
           ></Button>
         </div>
       </div>
@@ -122,7 +114,7 @@ const App = () => {
         score={scorePlayer1}
         roll={currentScorePlayer1}
         currentPlaying={player1Turn ? msg.currentPlaying : msg.notPlaying}
-        isWinner={!player1Turn && winner ? "is-winner" : ""}
+        iswinnerName={!player1Turn && winnerName ? "is-winner" : ""}
       />
       <Player
         playerSide="right-player"
@@ -131,10 +123,10 @@ const App = () => {
         roll={currentScorePlayer2}
         // change text to variable
         currentPlaying={!player1Turn ? msg.currentPlaying : msg.notPlaying}
-        isWinner={player1Turn && winner ? "is-winner" : ""}
+        iswinnerName={player1Turn && winnerName ? "is-winner" : ""}
       />
     </div>
   );
-}
+};
 
 export default App;
