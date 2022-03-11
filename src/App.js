@@ -80,7 +80,6 @@ const App = () => {
     setPlayer1Turn(true);
     setWinnerName(undefined);
   };
-  // check if there is a way to use a variable as className
   // check the html value of icons
   // move to another file called message.js inside directory Consts
   const msg = {
@@ -98,6 +97,7 @@ const App = () => {
     isWinner: "is-winner",
     emptyClass: "",
   };
+
   return (
     <div className={classes.gameScreen}>
       <div className={classes.buttons}>
