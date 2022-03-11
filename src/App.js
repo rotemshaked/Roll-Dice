@@ -2,117 +2,150 @@ import "./assets/styles.css";
 import Player from "./components/player";
 import Button from "./components/button";
 import Dice from "./components/dice";
+
 import { useState } from "react";
 
-function App() {
+const App = () => {
+  const [players, setPlayers] = useState({
+    player1: {
+      name: "Player 1",
+      playerSide: "left-player",
+    },
+    player2: {
+      name: "Player 2",
+      playerSide: "right-player",
+    },
+  });
+  const [buttons, setButtons] = useState([
+    "NEW GAME",
+    "🎲 ROLL DICE",
+    "➕ END TURN",
+  ]);
   const [diceNumber, setDiceNumber] = useState(1);
   const [scorePlayer1, setScorePlayer1] = useState(0);
   const [scorePlayer2, setScorePlayer2] = useState(0);
-  const [currentPlayer1Score, setCurrentPlayer1Score] = useState(0);
-  const [currentPlayer2Score, setCurrentPlayer2Score] = useState(0);
-  const [diceExist, setDiceExist] = useState(false);
+  const [currentScorePlayer1, setcurrentScorePlayer1] = useState(0);
+  const [currentScorePlayer2, setcurrentScorePlayer2] = useState(0);
+  const [showDice, setShowDice] = useState(false);
   const [player1Turn, setPlayer1Turn] = useState(true);
-  const [winner, setWinner] = useState(false);
+  const [winnerName, setWinnerName] = useState(undefined);
 
-  const handleRollDice = () => {
-    if (!winner) {
+  const handleTurn = () => {
+    if (!winnerName) {
       let randomNumber = Math.floor(Math.random() * 6) + 1;
       setDiceNumber(randomNumber);
-      setDiceExist(true);
-      if (player1Turn) {
-        if (randomNumber === 1) {
-          setScorePlayer1(0);
-          setCurrentPlayer1Score(0);
-          setPlayer1Turn(!player1Turn);
-        } else {
-          setCurrentPlayer1Score((randomNumber += currentPlayer1Score));
-        }
-      } else {
-        if (randomNumber === 1) {
-          setScorePlayer2(0);
-          setCurrentPlayer2Score(0);
-          setPlayer1Turn(!player1Turn);
-        } else {
-          setCurrentPlayer2Score((randomNumber += currentPlayer2Score));
-        }
-      }
+      setShowDice(true);
+      currentPlaying(randomNumber);
     }
   };
 
-  const handleHoldClick = () => {
-    if (!winner) {
-      if (player1Turn) {
-        let current = scorePlayer1 + currentPlayer1Score;
-        setScorePlayer1(current);
-        setPlayer1Turn(!player1Turn);
-        setCurrentPlayer1Score(0);
-        if (current > 30) {
-          setDiceExist(false);
-          setWinner(true);
-        }
-      } else {
-        let current = scorePlayer2 + currentPlayer2Score;
-        setScorePlayer2(current);
-        setPlayer1Turn(!player1Turn);
-        setCurrentPlayer2Score(0);
-        if (current > 30) {
-          setDiceExist(false);
-          setWinner(true);
-        }
-      }
+  const currentPlaying = (randomNumber) => {
+    if (randomNumber === 1) {
+      player1Turn
+        ? setScorePlayer1(0) && setcurrentScorePlayer1(0)
+        : setScorePlayer2(0) && setcurrentScorePlayer2(0);
+      setPlayer1Turn(!player1Turn);
+    } else if (!winnerName) {
+      player1Turn
+        ? setcurrentScorePlayer1((randomNumber += currentScorePlayer1))
+        : setcurrentScorePlayer2((randomNumber += currentScorePlayer2));
     }
   };
 
-  const newGame = () => {
-    setCurrentPlayer1Score(0);
-    setCurrentPlayer2Score(0);
+  const endTurn = () => {
+    if (!winnerName) {
+      scores();
+    }
+  };
+
+  const scores = (player) => {
+    let current = player1Turn
+      ? scorePlayer1 + currentScorePlayer1
+      : scorePlayer2 + currentScorePlayer2;
+    player1Turn ? setScorePlayer1(current) : setScorePlayer2(current);
+    setPlayer1Turn(!player1Turn);
+    player1Turn ? setcurrentScorePlayer1(0) : setcurrentScorePlayer2(0);
+    if (current >= 30) {
+      setShowDice(false);
+      player1Turn ? setWinnerName(`player 1`) : setWinnerName(`player 2`);
+    }
+  };
+
+  const resetGame = () => {
+    setcurrentScorePlayer1(0);
+    setcurrentScorePlayer2(0);
     setScorePlayer1(0);
     setScorePlayer2(0);
-    setDiceExist(false);
+    setShowDice(false);
     setPlayer1Turn(true);
-    setWinner(false);
+    setWinnerName(undefined);
+  };
+  // check if there is a way to use a variable as className
+  // check the html value of icons
+  // move to another file called message.js inside directory Consts
+  const msg = {
+    currentPlaying: "current-playing",
+    notPlaying: "",
   };
 
+  const classes = {
+    gameScreen: "game-screen",
+    buttons: "buttons",
+    newGame: "new-game",
+    bottomBtn: "bottom-btns",
+    rollDice: "roll-dice",
+    hold: "hold",
+    isWinner: "is-winner",
+    emptyClass: "",
+  };
   return (
-    <div className="game-screen">
-      <div className="buttons">
+    <div className={classes.gameScreen}>
+      <div className={classes.buttons}>
         <Button
-          className="btn new-game"
-          btnName=" NEW GAME"
-          onClick={newGame}
+          className={classes.newGame}
+          btnName={buttons[0]}
+          onClick={resetGame}
         ></Button>
-        {diceExist && <Dice diceNumber={diceNumber} />}
-        <div className="bottom-btns">
+        {showDice && <Dice diceNumber={diceNumber} />}
+        <div className={classes.bottomBtn}>
           <Button
-            className="btn roll-dice"
-            btnName="🎲 ROLL DICE"
-            onClick={handleRollDice}
+            className={classes.rollDice}
+            btnName={buttons[1]}
+            onClick={handleTurn}
           ></Button>
           <Button
-            className="btn hold"
-            btnName="➕ END TURN"
-            onClick={handleHoldClick}
+            className={classes.hold}
+            btnName={buttons[2]}
+            onClick={endTurn}
           ></Button>
         </div>
       </div>
       <Player
-        playerSide="left-player"
-        playerName="PLAYER 1"
+        playerSide={players.player1.playerSide}
+        playerName={players.player2.name}
         score={scorePlayer1}
-        roll={currentPlayer1Score}
-        currentPlaying={player1Turn ? "current-playing" : ""}
-        isWinner={!player1Turn && winner ? "is-winner" : ""}
+        roll={currentScorePlayer1}
+        currentPlaying={player1Turn ? msg.currentPlaying : msg.notPlaying}
+        iswinnerName={
+          !player1Turn && winnerName
+            ? `${classes.isWinner}`
+            : `${classes.emptyClass}`
+        }
       />
       <Player
-        playerSide="right-player"
-        playerName="PLAYER 2"
+        playerSide={players.player2.playerSide}
+        playerName={players.player2.name}
         score={scorePlayer2}
-        roll={currentPlayer2Score}
-        currentPlaying={!player1Turn ? "current-playing" : ""}
-        isWinner={player1Turn && winner ? "is-winner" : ""}
+        roll={currentScorePlayer2}
+        currentPlaying={!player1Turn ? msg.currentPlaying : msg.notPlaying}
+        iswinnerName={
+          player1Turn && winnerName
+            ? `${classes.isWinner}`
+            : `${classes.emptyClass}`
+        }
       />
     </div>
   );
-}
+};
 
 export default App;

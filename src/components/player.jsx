@@ -6,10 +6,12 @@ const Player = ({
   score,
   roll,
   currentPlaying,
-  isWinner,
+  iswinnerName,
 }) => {
   return (
-    <div className={`player-board ${playerSide} ${currentPlaying} ${isWinner}`}>
+    <div
+      className={`player-board ${playerSide} ${currentPlaying} ${iswinnerName}`}
+    >
       <div className="player-name">{playerName}</div>
       <div className="score">{score}</div>
       <div className="current-roll">
