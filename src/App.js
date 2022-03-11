@@ -87,23 +87,34 @@ const App = () => {
     currentPlaying: "current-playing",
     notPlaying: "",
   };
+
+  const classes = {
+    gameScreen: "game-screen",
+    buttons: "buttons",
+    newGame: "new-game",
+    bottomBtn: "bottom-btns",
+    rollDice: "roll-dice",
+    hold: "hold",
+    isWinner: "is-winner",
+    emptyClass: "",
+  };
   return (
-    <div className="game-screen">
-      <div className="buttons">
+    <div className={classes.gameScreen}>
+      <div className={classes.buttons}>
         <Button
-          className="new-game"
+          className={classes.newGame}
           btnName={buttons[0]}
           onClick={resetGame}
         ></Button>
         {showDice && <Dice diceNumber={diceNumber} />}
-        <div className="bottom-btns">
+        <div className={classes.bottomBtn}>
           <Button
-            className="roll-dice"
+            className={classes.rollDice}
             btnName={buttons[1]}
             onClick={handleTurn}
           ></Button>
           <Button
-            className="hold"
+            className={classes.hold}
             btnName={buttons[2]}
             onClick={endTurn}
           ></Button>
@@ -115,7 +126,11 @@ const App = () => {
         score={scorePlayer1}
         roll={currentScorePlayer1}
         currentPlaying={player1Turn ? msg.currentPlaying : msg.notPlaying}
-        iswinnerName={!player1Turn && winnerName ? "is-winner" : ""}
+        iswinnerName={
+          !player1Turn && winnerName
+            ? `${classes.isWinner}`
+            : `${classes.emptyClass}`
+        }
       />
       <Player
         playerSide={players.player2.playerSide}
@@ -123,7 +138,11 @@ const App = () => {
         score={scorePlayer2}
         roll={currentScorePlayer2}
         currentPlaying={!player1Turn ? msg.currentPlaying : msg.notPlaying}
-        iswinnerName={player1Turn && winnerName ? "is-winner" : ""}
+        iswinnerName={
+          player1Turn && winnerName
+            ? `${classes.isWinner}`
+            : `${classes.emptyClass}`
+        }
       />
     </div>
   );
