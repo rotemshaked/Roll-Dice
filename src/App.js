@@ -6,6 +6,21 @@ import Dice from "./components/dice";
 import { useState } from "react";
 
 const App = () => {
+  const [players, setPlayers] = useState({
+    player1: {
+      name: "Player 1",
+      playerSide: "left-player",
+    },
+    player2: {
+      name: "Player 2",
+      playerSide: "right-player",
+    },
+  });
+  const [buttons, setButtons] = useState([
+    "NEW GAME",
+    "🎲 ROLL DICE",
+    "➕ END TURN",
+  ]);
   const [diceNumber, setDiceNumber] = useState(1);
   const [scorePlayer1, setScorePlayer1] = useState(0);
   const [scorePlayer2, setScorePlayer2] = useState(0);
@@ -66,7 +81,6 @@ const App = () => {
     setWinnerName(undefined);
   };
   // check if there is a way to use a variable as className
-  // remove prefixes from classes for example: "btn"
   // check the html value of icons
   // move to another file called message.js inside directory Consts
   const msg = {
@@ -77,38 +91,37 @@ const App = () => {
     <div className="game-screen">
       <div className="buttons">
         <Button
-          className="btn new-game"
-          btnName="NEW GAME"
+          className="new-game"
+          btnName={buttons[0]}
           onClick={resetGame}
         ></Button>
         {showDice && <Dice diceNumber={diceNumber} />}
         <div className="bottom-btns">
           <Button
-            className="btn roll-dice"
-            btnName="🎲 ROLL DICE"
+            className="roll-dice"
+            btnName={buttons[1]}
             onClick={handleTurn}
           ></Button>
           <Button
-            className="btn hold"
-            btnName="➕ END TURN"
+            className="hold"
+            btnName={buttons[2]}
             onClick={endTurn}
           ></Button>
         </div>
       </div>
       <Player
-        playerSide="left-player"
-        playerName="PLAYER 1"
+        playerSide={players.player1.playerSide}
+        playerName={players.player2.name}
         score={scorePlayer1}
         roll={currentScorePlayer1}
         currentPlaying={player1Turn ? msg.currentPlaying : msg.notPlaying}
         iswinnerName={!player1Turn && winnerName ? "is-winner" : ""}
       />
       <Player
-        playerSide="right-player"
-        playerName="PLAYER 2"
+        playerSide={players.player2.playerSide}
+        playerName={players.player2.name}
         score={scorePlayer2}
         roll={currentScorePlayer2}
-        // change text to variable
         currentPlaying={!player1Turn ? msg.currentPlaying : msg.notPlaying}
         iswinnerName={player1Turn && winnerName ? "is-winner" : ""}
       />
